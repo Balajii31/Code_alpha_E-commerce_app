@@ -1,0 +1,24 @@
+{% extends 'shop/base.html' %}
+{% block title %}Products{% endblock %}
+{% block content %}
+  <h1>Products</h1>
+  {% if products %}
+    <div class="grid">
+      {% for p in products %}
+      <div class="card">
+        <img src="{{ p.image_url|default:'#' }}" alt="{{ p.name }}"/>
+        <div class="p">
+          <div class="muted">#{{ p.id }}</div>
+          <h3>{{ p.name }}</h3>
+          <div class="price">₹ {{ p.price }}</div>
+          <p class="muted">{{ p.description|truncatechars:80 }}</p>
+          <a class="btn" href="{% url 'product_detail' p.id %}">View</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">No products yet.</p>
+  {% endif %}
+{% endblock %}
+

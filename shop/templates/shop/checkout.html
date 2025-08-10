@@ -1,0 +1,20 @@
+{% extends 'shop/base.html' %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+  <h1>Checkout</h1>
+  {% if items %}
+    <ul>
+      {% for i in items %}
+        <li>{{ i.product.name }} × {{ i.quantity }} — ₹ {{ i.line_total }}</li>
+      {% endfor %}
+    </ul>
+    <p><strong>Total:</strong> ₹ {{ subtotal }}</p>
+    <form method="post">
+      {% csrf_token %}
+      <button class="btn primary" type="submit">Place Order</button>
+    </form>
+  {% else %}
+    <p class="muted">Your cart is empty.</p>
+  {% endif %}
+{% endblock %}
+

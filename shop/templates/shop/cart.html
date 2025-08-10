@@ -1,0 +1,49 @@
+{% extends 'shop/base.html' %}
+{% block title %}Your Cart{% endblock %}
+{% block content %}
+  <h1>Your Cart</h1>
+  {% if items %}
+    <table style="width:100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="text-align:left">Product</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in items %}
+        <tr>
+          <td>
+            <a href="{% url 'product_detail' i.product.id %}">{{ i.product.name }}</a>
+          </td>
+          <td style="text-align:center">₹ {{ i.unit_price }}</td>
+          <td style="text-align:center">
+            <form method="post" action="{% url 'update_cart' i.product.id %}">
+              {% csrf_token %}
+              <input type="number" name="quantity" value="{{ i.quantity }}" min="0" max="{{ i.product.stock }}" style="width:64px" />
+              <button class="btn" type="submit">Update</button>
+            </form>
+          </td>
+          <td style="text-align:center">₹ {{ i.line_total }}</td>
+          <td style="text-align:right">
+            <form method="post" action="{% url 'remove_from_cart' i.product.id %}">
+              {% csrf_token %}
+              <button class="btn" type="submit">Remove</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p style="text-align:right"><strong>Subtotal:</strong> ₹ {{ subtotal }}</p>
+    <div style="text-align:right">
+      <a class="btn primary" href="/checkout/">Proceed to Checkout</a>
+    </div>
+  {% else %}
+    <p class="muted">Your cart is empty.</p>
+  {% endif %}
+{% endblock %}
+

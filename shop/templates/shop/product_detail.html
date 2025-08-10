@@ -1,0 +1,26 @@
+{% extends 'shop/base.html' %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+  <a href="/">← Back to products</a>
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;">
+    <div>
+      <img style="width:100%; max-height:360px; object-fit:cover; background:#f3f4f6;" src="{{ product.image_url|default:'#' }}" alt="{{ product.name }}">
+    </div>
+    <div>
+      <h1>{{ product.name }}</h1>
+      <div class="price">₹ {{ product.price }}</div>
+      <p>{{ product.description }}</p>
+      <p class="muted">Stock: {{ product.stock }}</p>
+      {% if product.stock > 0 %}
+      <form method="post" action="{% url 'add_to_cart' product.id %}">
+        {% csrf_token %}
+        <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" />
+        <button class="btn primary" type="submit">Add to cart</button>
+      </form>
+      {% else %}
+      <p class="muted">Out of stock</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
